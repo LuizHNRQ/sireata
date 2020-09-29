@@ -8,44 +8,18 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.edu.utfpr.dv.sireata.dao.factoryPattern.BuscaPorIdFactory;
+import br.edu.utfpr.dv.sireata.dao.factoryPattern.TipoDeBusca;
+import br.edu.utfpr.dv.sireata.dao.tiposDeFactory.SearchAnexoDAO;
+import br.edu.utfpr.dv.sireata.dao.tiposDeFactory.SearchOrgaoDAO;
 import br.edu.utfpr.dv.sireata.model.Orgao;
 import br.edu.utfpr.dv.sireata.model.OrgaoMembro;
 import br.edu.utfpr.dv.sireata.model.Usuario;
 
 public class OrgaoDAO {
 	
-	public Orgao buscarPorId(int id) throws SQLException{
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		
-		try{
-			conn = ConnectionDAO.getInstance().getConnection();
-			stmt = conn.prepareStatement(
-				"SELECT orgaos.*, p.nome AS presidente, s.nome AS secretario, departamentos.nome AS departamento FROM orgaos " +
-				"INNER JOIN departamentos ON departamentos.iddepartamento=orgaos.iddepartamento " +
-				"INNER JOIN usuarios p ON p.idusuario=orgaos.idpresidente " +
-				"INNER JOIN usuarios s ON s.idusuario=orgaos.idsecretario " +
-				"WHERE orgaos.idOrgao = ?");
-		
-			stmt.setInt(1, id);
-			
-			rs = stmt.executeQuery();
-			
-			if(rs.next()){
-				return this.carregarObjeto(rs);
-			}else{
-				return null;
-			}
-		}finally{
-			if((rs != null) && !rs.isClosed())
-				rs.close();
-			if((stmt != null) && !stmt.isClosed())
-				stmt.close();
-			if((conn != null) && !conn.isClosed())
-				conn.close();
-		}
-	}
+
+	SearchOrgaoDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.OrgaoDAO, int id,Connection conn, PreparedStatement stmt, ResultSet rs);
 	
 	public List<Orgao> listarTodos(boolean apenasAtivos) throws SQLException{
 		Connection conn = null;

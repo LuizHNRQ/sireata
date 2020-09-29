@@ -8,39 +8,15 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.edu.utfpr.dv.sireata.dao.factoryPattern.BuscaPorIdFactory;
+import br.edu.utfpr.dv.sireata.dao.factoryPattern.TipoDeBusca;
+import br.edu.utfpr.dv.sireata.dao.tiposDeFactory.SearchAnexoDAO;
+import br.edu.utfpr.dv.sireata.dao.tiposDeFactory.SearchAtaDAO;
 import br.edu.utfpr.dv.sireata.model.AtaParticipante;
 
 public class AtaParticipanteDAO {
-	
-	public AtaParticipante buscarPorId(int id) throws SQLException{
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		
-		try{
-			conn = ConnectionDAO.getInstance().getConnection();
-			stmt = conn.prepareStatement("SELECT ataparticipantes.*, usuarios.nome AS nomeParticipante FROM ataparticipantes " +
-				"INNER JOIN usuarios ON usuarios.idUsuario=ataparticipantes.idUsuario " +
-				"WHERE idAtaParticipante = ?");
-		
-			stmt.setInt(1, id);
-			
-			rs = stmt.executeQuery();
-			
-			if(rs.next()){
-				return this.carregarObjeto(rs);
-			}else{
-				return null;
-			}
-		}finally{
-			if((rs != null) && !rs.isClosed())
-				rs.close();
-			if((stmt != null) && !stmt.isClosed())
-				stmt.close();
-			if((conn != null) && !conn.isClosed())
-				conn.close();
-		}
-	}
+
+	SearchAtaDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.AtaDAO, int id,Connection conn, PreparedStatement stmt, ResultSet rs);
 	
 	public List<AtaParticipante> listarPorAta(int idAta) throws SQLException{
 		Connection conn = null;

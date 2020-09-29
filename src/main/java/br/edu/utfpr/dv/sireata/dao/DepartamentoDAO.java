@@ -9,40 +9,15 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.edu.utfpr.dv.sireata.dao.factoryPattern.BuscaPorIdFactory;
+import br.edu.utfpr.dv.sireata.dao.factoryPattern.TipoDeBusca;
+import br.edu.utfpr.dv.sireata.dao.tiposDeFactory.SearchAnexoDAO;
+import br.edu.utfpr.dv.sireata.dao.tiposDeFactory.SearchDepartmentDAO;
 import br.edu.utfpr.dv.sireata.model.Departamento;
 
 public class DepartamentoDAO {
 
-	public Departamento buscarPorId(int id) throws SQLException{
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		
-		try{
-			conn = ConnectionDAO.getInstance().getConnection();
-			stmt = conn.prepareStatement(
-				"SELECT departamentos.*, campus.nome AS nomeCampus " +
-				"FROM departamentos INNER JOIN campus ON campus.idCampus=departamentos.idCampus " +
-				"WHERE idDepartamento = ?");
-		
-			stmt.setInt(1, id);
-			
-			rs = stmt.executeQuery();
-			
-			if(rs.next()){
-				return this.carregarObjeto(rs);
-			}else{
-				return null;
-			}
-		}finally{
-			if((rs != null) && !rs.isClosed())
-				rs.close();
-			if((stmt != null) && !stmt.isClosed())
-				stmt.close();
-			if((conn != null) && !conn.isClosed())
-				conn.close();
-		}
-	}
+	SearchDepartmentDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.DepartmentDAO, int id,Connection conn, PreparedStatement stmt, ResultSet rs);
 	
 	public Departamento buscarPorOrgao(int idOrgao) throws SQLException{
 		Connection conn = null;

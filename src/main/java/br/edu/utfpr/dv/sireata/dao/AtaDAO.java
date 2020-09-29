@@ -9,6 +9,9 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.edu.utfpr.dv.sireata.dao.factoryPattern.BuscaPorIdFactory;
+import br.edu.utfpr.dv.sireata.dao.factoryPattern.TipoDeBusca;
+import br.edu.utfpr.dv.sireata.dao.tiposDeFactory.SearchAtaDAO;
 import br.edu.utfpr.dv.sireata.model.Ata;
 import br.edu.utfpr.dv.sireata.model.Ata.TipoAta;
 import br.edu.utfpr.dv.sireata.util.DateUtils;
@@ -19,7 +22,7 @@ public class AtaDAO {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		
+
 		try{
 			conn = ConnectionDAO.getInstance().getConnection();
 			stmt = conn.prepareStatement(
@@ -29,11 +32,11 @@ public class AtaDAO {
 						"INNER JOIN usuarios p ON p.idUsuario=atas.idPresidente " +
 						"INNER JOIN usuarios s ON s.idUsuario=atas.idSecretario " +
 						"WHERE idAta = ?");
-			
+
 			stmt.setInt(1, id);
-			
+
 			rs = stmt.executeQuery();
-			
+
 			if(rs.next()){
 				return this.carregarObjeto(rs);
 			}else{
@@ -48,6 +51,8 @@ public class AtaDAO {
 				conn.close();
 		}
 	}
+
+	SearchAtaDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.AnexoDAO, int id,Connection conn, PreparedStatement stmt, ResultSet rs);
 	
 	public Ata buscarPorNumero(int idOrgao, TipoAta tipo, int numero, int ano) throws SQLException{
 		Connection conn = null;

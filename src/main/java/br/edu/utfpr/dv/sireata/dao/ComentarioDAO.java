@@ -8,38 +8,16 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.edu.utfpr.dv.sireata.dao.factoryPattern.BuscaPorIdFactory;
+import br.edu.utfpr.dv.sireata.dao.factoryPattern.TipoDeBusca;
+import br.edu.utfpr.dv.sireata.dao.tiposDeFactory.SearchAnexoDAO;
+import br.edu.utfpr.dv.sireata.dao.tiposDeFactory.SearchComentarioDAO;
 import br.edu.utfpr.dv.sireata.model.Comentario;
 import br.edu.utfpr.dv.sireata.model.Comentario.SituacaoComentario;
 
 public class ComentarioDAO {
-	
-	public Comentario buscarPorId(int id) throws SQLException{
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		
-		try{
-			conn = ConnectionDAO.getInstance().getConnection();
-			stmt = conn.prepareStatement("SELECT * FROM comentarios WHERE idComentario = ?");
-		
-			stmt.setInt(1, id);
-			
-			rs = stmt.executeQuery();
-			
-			if(rs.next()){
-				return this.carregarObjeto(rs);
-			}else{
-				return null;
-			}
-		}finally{
-			if((rs != null) && !rs.isClosed())
-				rs.close();
-			if((stmt != null) && !stmt.isClosed())
-				stmt.close();
-			if((conn != null) && !conn.isClosed())
-				conn.close();
-		}
-	}
+
+	SearchComentarioDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.ComentarioDAO, int id,Connection conn, PreparedStatement stmt, ResultSet rs);
 	
 	public Comentario buscarPorUsuario(int idUsuario, int idPauta) throws SQLException{
 		Connection conn = null;
