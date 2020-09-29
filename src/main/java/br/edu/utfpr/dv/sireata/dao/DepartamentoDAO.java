@@ -17,7 +17,7 @@ import br.edu.utfpr.dv.sireata.model.Departamento;
 
 public class DepartamentoDAO {
 
-	SearchDepartmentDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.DepartmentDAO, int id,Connection conn, PreparedStatement stmt, ResultSet rs);
+	SearchDepartmentDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.DepartmentDAO,int id, conn,  stmt,  rs);
 	
 	public Departamento buscarPorOrgao(int idOrgao) throws SQLException{
 		Connection conn = null;

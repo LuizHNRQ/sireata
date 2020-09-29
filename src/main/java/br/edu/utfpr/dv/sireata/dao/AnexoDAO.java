@@ -16,7 +16,7 @@ import br.edu.utfpr.dv.sireata.model.Anexo;
 public class AnexoDAO {
 	
 
-	SearchAnexoDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.AnexoDAO, int id,Connection conn, PreparedStatement stmt, ResultSet rs);
+	SearchAnexoDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.AnexoDAO,int id, conn,  stmt,  rs);
 	
 	public List<Anexo> listarPorAta(int idAta) throws SQLException{
 		Connection conn = null;

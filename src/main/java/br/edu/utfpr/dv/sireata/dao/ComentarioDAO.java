@@ -17,7 +17,7 @@ import br.edu.utfpr.dv.sireata.model.Comentario.SituacaoComentario;
 
 public class ComentarioDAO {
 
-	SearchComentarioDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.ComentarioDAO, int id,Connection conn, PreparedStatement stmt, ResultSet rs);
+	SearchComentarioDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.ComentarioDAO,int id, conn,  stmt,  rs);
 	
 	public Comentario buscarPorUsuario(int idUsuario, int idPauta) throws SQLException{
 		Connection conn = null;

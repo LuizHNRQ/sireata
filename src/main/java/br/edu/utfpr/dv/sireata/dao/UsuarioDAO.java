@@ -43,7 +43,7 @@ public class UsuarioDAO {
 		}
 	}
 
-	SearchUsuarioDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.UsuarioDAO, int id,Connection conn, PreparedStatement stmt, ResultSet rs);
+	SearchUsuarioDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.UsuarioDAO, int id, conn,  stmt,  rs);
 
 	public String buscarEmail(int id) throws SQLException{
 		Connection conn = null;

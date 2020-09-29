@@ -18,7 +18,7 @@ import br.edu.utfpr.dv.sireata.util.DateUtils;
 
 public class AtaDAO {
 
-	SearchAtaDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.AnexoDAO, int id,Connection conn, PreparedStatement stmt, ResultSet rs);
+	SearchAtaDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.AnexoDAO,int id, conn,  stmt,  rs);
 	
 	public Ata buscarPorNumero(int idOrgao, TipoAta tipo, int numero, int ano) throws SQLException{
 		Connection conn = null;
