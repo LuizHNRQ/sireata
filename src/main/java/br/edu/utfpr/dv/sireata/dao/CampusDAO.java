@@ -20,125 +20,102 @@ public class CampusDAO {
 	SearchCampusDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.CampusDAO,int id, conn,  stmt,  rs);
 	
 	public Campus buscarPorDepartamento(int idDepartamento) throws SQLException{
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		
-		try{
-			conn = ConnectionDAO.getInstance().getConnection();
-			stmt = conn.prepareStatement("SELECT idCampus FROM departamentos WHERE idDepartamento=?");
-		
-			stmt.setInt(1, idDepartamento);
-			
-			rs = stmt.executeQuery();
-			
-			if(rs.next()){
-				return this.buscarPorId(rs.getInt("idCampus"));
-			}else{
-				return null;
+
+		try(
+				Connection conn = ConnectionDAO.getInstance().getConnection();
+				PreparedStatement stmt = conn.prepareStatement("SELECT idCampus FROM departamentos WHERE idDepartamento=?");
+				)
+		{
+			try{
+
+				stmt.setInt(1, idDepartamento);
+
+				ResultSet rs = stmt.executeQuery();
+
+				if(rs.next()){
+					return this.buscarPorId(rs.getInt("idCampus"));
+				}else{
+					return null;
+				}
 			}
-		}finally{
-			if((rs != null) && !rs.isClosed())
-				rs.close();
-			if((stmt != null) && !stmt.isClosed())
-				stmt.close();
-			if((conn != null) && !conn.isClosed())
-				conn.close();
 		}
+		
+
 	}
 	
 	public List<Campus> listarTodos(boolean apenasAtivos) throws SQLException{
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		
-		try{
-			conn = ConnectionDAO.getInstance().getConnection();
-			stmt = conn.createStatement();
-		
-			rs = stmt.executeQuery("SELECT * FROM campus " + (apenasAtivos ? " WHERE ativo=1" : "") + " ORDER BY nome");
-		
-			List<Campus> list = new ArrayList<Campus>();
-			
-			while(rs.next()){
-				list.add(this.carregarObjeto(rs));
+
+		try(
+				Connection conn = ConnectionDAO.getInstance().getConnection();
+				Statement stmt = conn.createStatement();
+				)
+		{
+			try{
+
+				ResultSet rs = stmt.executeQuery("SELECT * FROM campus " + (apenasAtivos ? " WHERE ativo=1" : "") + " ORDER BY nome");
+
+				List<Campus> list = new ArrayList<Campus>();
+
+				while(rs.next()){
+					list.add(this.carregarObjeto(rs));
+				}
+
+				return list;
 			}
-			
-			return list;
-		}finally{
-			if((rs != null) && !rs.isClosed())
-				rs.close();
-			if((stmt != null) && !stmt.isClosed())
-				stmt.close();
-			if((conn != null) && !conn.isClosed())
-				conn.close();
 		}
+
 	}
 	
 	public List<Campus> listarParaCriacaoAta(int idUsuario) throws SQLException{
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		
-		try{
-			conn = ConnectionDAO.getInstance().getConnection();
-			stmt = conn.createStatement();
-		
-			rs = stmt.executeQuery("SELECT DISTINCT campus.* FROM campus " +
-				"INNER JOIN departamentos ON departamentos.idCampus=campus.idCampus " +
-				"INNER JOIN orgaos ON orgaos.idDepartamento=departamentos.idDepartamento " +
-				"WHERE campus.ativo=1 AND (orgaos.idPresidente=" + String.valueOf(idUsuario) + " OR orgaos.idSecretario=" + String.valueOf(idUsuario) + 
-				") ORDER BY campus.nome");
-		
-			List<Campus> list = new ArrayList<Campus>();
-			
-			while(rs.next()){
-				list.add(this.carregarObjeto(rs));
+
+		try(
+				Connection conn = ConnectionDAO.getInstance().getConnection();
+				Statement stmt = conn.createStatement();
+				)
+		{
+			try{
+				ResultSet rs = stmt.executeQuery("SELECT DISTINCT campus.* FROM campus " +
+						"INNER JOIN departamentos ON departamentos.idCampus=campus.idCampus " +
+						"INNER JOIN orgaos ON orgaos.idDepartamento=departamentos.idDepartamento " +
+						"WHERE campus.ativo=1 AND (orgaos.idPresidente=" + String.valueOf(idUsuario) + " OR orgaos.idSecretario=" + String.valueOf(idUsuario) +
+						") ORDER BY campus.nome");
+
+				List<Campus> list = new ArrayList<Campus>();
+
+				while(rs.next()){
+					list.add(this.carregarObjeto(rs));
+				}
+				return list;
 			}
-			
-			return list;
-		}finally{
-			if((rs != null) && !rs.isClosed())
-				rs.close();
-			if((stmt != null) && !stmt.isClosed())
-				stmt.close();
-			if((conn != null) && !conn.isClosed())
-				conn.close();
 		}
 	}
 	
 	public List<Campus> listarParaConsultaAtas(int idUsuario) throws SQLException{
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		
-		try{
-			conn = ConnectionDAO.getInstance().getConnection();
-			stmt = conn.createStatement();
-		
-			rs = stmt.executeQuery("SELECT DISTINCT campus.* FROM campus " +
-				"INNER JOIN departamentos ON departamentos.idCampus=campus.idCampus " +
-				"INNER JOIN orgaos ON orgaos.idDepartamento=departamentos.idDepartamento " +
-				"INNER JOIN atas ON atas.idOrgao=orgaos.idOrgao " +
-				"INNER JOIN ataParticipantes ON ataParticipantes.idAta=atas.idAta " +
-				"WHERE atas.publicada=0 AND ataParticipantes.presente=1 AND ataParticipantes.idUsuario=" + String.valueOf(idUsuario) + 
-				" ORDER BY campus.nome");
-		
-			List<Campus> list = new ArrayList<Campus>();
-			
-			while(rs.next()){
-				list.add(this.carregarObjeto(rs));
+
+		try(
+				Connection conn = ConnectionDAO.getInstance().getConnection();
+				Statement stmt = conn.createStatement();
+				)
+		{
+			try{
+				ResultSet rs = stmt.executeQuery("SELECT DISTINCT campus.* FROM campus " +
+						"INNER JOIN departamentos ON departamentos.idCampus=campus.idCampus " +
+						"INNER JOIN orgaos ON orgaos.idDepartamento=departamentos.idDepartamento " +
+						"INNER JOIN atas ON atas.idOrgao=orgaos.idOrgao " +
+						"INNER JOIN ataParticipantes ON ataParticipantes.idAta=atas.idAta " +
+						"WHERE atas.publicada=0 AND ataParticipantes.presente=1 AND ataParticipantes.idUsuario=" + String.valueOf(idUsuario) +
+						" ORDER BY campus.nome");
+
+				List<Campus> list = new ArrayList<Campus>();
+
+				while(rs.next()){
+					list.add(this.carregarObjeto(rs));
+				}
+				return list;
 			}
-			
-			return list;
-		}finally{
-			if((rs != null) && !rs.isClosed())
-				rs.close();
-			if((stmt != null) && !stmt.isClosed())
-				stmt.close();
-			if((conn != null) && !conn.isClosed())
-				conn.close();
 		}
+		
+
 	}
 	
 	public int salvar(Campus campus) throws SQLException{

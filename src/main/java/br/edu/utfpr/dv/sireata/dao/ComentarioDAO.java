@@ -20,61 +20,49 @@ public class ComentarioDAO {
 	SearchComentarioDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.ComentarioDAO,int id, conn,  stmt,  rs);
 	
 	public Comentario buscarPorUsuario(int idUsuario, int idPauta) throws SQLException{
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		
-		try{
-			conn = ConnectionDAO.getInstance().getConnection();
-			stmt = conn.createStatement();
-		
-			rs = stmt.executeQuery("SELECT comentarios.*, usuarios.nome AS nomeUsuario FROM comentarios " +
-				"INNER JOIN usuarios ON usuarios.idUsuario=comentarios.idUsuario " +
-				"WHERE comentarios.idPauta=" + String.valueOf(idPauta) + " AND comentarios.idUsuario=" + String.valueOf(idUsuario));
-		
-			if(rs.next()){
-				return this.carregarObjeto(rs);
-			}else{
-				return null;
+
+		try(
+				Connection conn = ConnectionDAO.getInstance().getConnection();
+				Statement stmt = conn.createStatement();
+				)
+		{
+			try{
+				ResultSet rs = stmt.executeQuery("SELECT comentarios.*, usuarios.nome AS nomeUsuario FROM comentarios " +
+						"INNER JOIN usuarios ON usuarios.idUsuario=comentarios.idUsuario " +
+						"WHERE comentarios.idPauta=" + String.valueOf(idPauta) + " AND comentarios.idUsuario=" + String.valueOf(idUsuario));
+
+				if(rs.next()){
+					return this.carregarObjeto(rs);
+				}else{
+					return null;
+				}
 			}
-		}finally{
-			if((rs != null) && !rs.isClosed())
-				rs.close();
-			if((stmt != null) && !stmt.isClosed())
-				stmt.close();
-			if((conn != null) && !conn.isClosed())
-				conn.close();
 		}
 	}
 	
 	public List<Comentario> listarPorPauta(int idPauta) throws SQLException{
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		
-		try{
-			conn = ConnectionDAO.getInstance().getConnection();
-			stmt = conn.createStatement();
-		
-			rs = stmt.executeQuery("SELECT comentarios.*, usuarios.nome AS nomeUsuario FROM comentarios " +
-				"INNER JOIN usuarios ON usuarios.idUsuario=comentarios.idUsuario " +
-				"WHERE comentarios.idPauta=" + String.valueOf(idPauta) + " ORDER BY usuarios.nome");
-		
-			List<Comentario> list = new ArrayList<Comentario>();
-			
-			while(rs.next()){
-				list.add(this.carregarObjeto(rs));
+
+		try(
+				Connection conn = ConnectionDAO.getInstance().getConnection();
+				Statement stmt = conn.createStatement();
+				)
+		{
+			try{
+				ResultSet rs = stmt.executeQuery("SELECT comentarios.*, usuarios.nome AS nomeUsuario FROM comentarios " +
+						"INNER JOIN usuarios ON usuarios.idUsuario=comentarios.idUsuario " +
+						"WHERE comentarios.idPauta=" + String.valueOf(idPauta) + " ORDER BY usuarios.nome");
+
+				List<Comentario> list = new ArrayList<Comentario>();
+
+				while(rs.next()){
+					list.add(this.carregarObjeto(rs));
+				}
+
+				return list;
 			}
-			
-			return list;
-		}finally{
-			if((rs != null) && !rs.isClosed())
-				rs.close();
-			if((stmt != null) && !stmt.isClosed())
-				stmt.close();
-			if((conn != null) && !conn.isClosed())
-				conn.close();
 		}
+		
+
 	}
 	
 	public int salvar(Comentario comentario) throws SQLException{

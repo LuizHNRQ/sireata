@@ -19,33 +19,28 @@ public class AtaParticipanteDAO {
 	SearchAtaDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.AtaDAO,int id, conn,  stmt,  rs);
 	
 	public List<AtaParticipante> listarPorAta(int idAta) throws SQLException{
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		
-		try{
-			conn = ConnectionDAO.getInstance().getConnection();
-			stmt = conn.createStatement();
-		
-			rs = stmt.executeQuery("SELECT ataparticipantes.*, usuarios.nome AS nomeParticipante FROM ataparticipantes " +
-				"INNER JOIN usuarios ON usuarios.idUsuario=ataparticipantes.idUsuario " + 
-				"WHERE idAta=" + String.valueOf(idAta) + " ORDER BY usuarios.nome");
-		
-			List<AtaParticipante> list = new ArrayList<AtaParticipante>();
-			
-			while(rs.next()){
-				list.add(this.carregarObjeto(rs));
+
+		try(
+				Connection conn = ConnectionDAO.getInstance().getConnection();
+				Statement stmt = conn.createStatement();
+				)
+		{
+			try{
+
+				ResultSet rs = stmt.executeQuery("SELECT ataparticipantes.*, usuarios.nome AS nomeParticipante FROM ataparticipantes " +
+						"INNER JOIN usuarios ON usuarios.idUsuario=ataparticipantes.idUsuario " +
+						"WHERE idAta=" + String.valueOf(idAta) + " ORDER BY usuarios.nome");
+
+				List<AtaParticipante> list = new ArrayList<AtaParticipante>();
+
+				while(rs.next()){
+					list.add(this.carregarObjeto(rs));
+				}
+
+				return list;
 			}
-			
-			return list;
-		}finally{
-			if((rs != null) && !rs.isClosed())
-				rs.close();
-			if((stmt != null) && !stmt.isClosed())
-				stmt.close();
-			if((conn != null) && !conn.isClosed())
-				conn.close();
 		}
+
 	}
 	
 	public int salvar(AtaParticipante participante) throws SQLException{
@@ -96,20 +91,18 @@ public class AtaParticipanteDAO {
 	}
 	
 	public void excluir(int id) throws SQLException{
-		Connection conn = null;
-		Statement stmt = null;
-		
-		try{
-			conn = ConnectionDAO.getInstance().getConnection();
-			stmt = conn.createStatement();
-		
-			stmt.execute("DELETE FROM ataparticipantes WHERE idAtaParticipante=" + String.valueOf(id));
-		}finally{
-			if((stmt != null) && !stmt.isClosed())
-				stmt.close();
-			if((conn != null) && !conn.isClosed())
-				conn.close();
+
+		try(
+				Connection conn = ConnectionDAO.getInstance().getConnection();
+				Statement stmt = conn.createStatement();
+				)
+		{
+			try{
+				stmt.execute("DELETE FROM ataparticipantes WHERE idAtaParticipante=" + String.valueOf(id));
+			}
 		}
+		
+
 	}
 	
 	private AtaParticipante carregarObjeto(ResultSet rs) throws SQLException{

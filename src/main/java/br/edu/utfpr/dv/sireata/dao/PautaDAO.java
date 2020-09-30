@@ -20,30 +20,23 @@ public class PautaDAO {
 	SearchPautaDAO = BuscaPorIdFactory.novaBusca(TipoDeBusca.PautaDAO, int id, conn,  stmt,  rs);
 	
 	public List<Pauta> listarPorAta(int idAta) throws SQLException{
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		
-		try{
-			conn = ConnectionDAO.getInstance().getConnection();
-			stmt = conn.createStatement();
-		
-			rs = stmt.executeQuery("SELECT * FROM pautas WHERE idAta=" + String.valueOf(idAta) + " ORDER BY ordem");
-		
-			List<Pauta> list = new ArrayList<Pauta>();
-			
-			while(rs.next()){
-				list.add(this.carregarObjeto(rs));
+
+		try(
+				Connection conn = ConnectionDAO.getInstance().getConnection();
+				Statement stmt = conn.createStatement();
+				)
+		{
+			try{
+				ResultSet rs = stmt.executeQuery("SELECT * FROM pautas WHERE idAta=" + String.valueOf(idAta) + " ORDER BY ordem");
+
+				List<Pauta> list = new ArrayList<Pauta>();
+
+				while(rs.next()){
+					list.add(this.carregarObjeto(rs));
+				}
+
+				return list;
 			}
-			
-			return list;
-		}finally{
-			if((rs != null) && !rs.isClosed())
-				rs.close();
-			if((stmt != null) && !stmt.isClosed())
-				stmt.close();
-			if((conn != null) && !conn.isClosed())
-				conn.close();
 		}
 	}
 	
@@ -93,19 +86,15 @@ public class PautaDAO {
 	}
 	
 	public void excluir(int id) throws SQLException{
-		Connection conn = null;
-		Statement stmt = null;
-		
-		try{
-			conn = ConnectionDAO.getInstance().getConnection();
-			stmt = conn.createStatement();
-		
-			stmt.execute("DELETE FROM pautas WHERE idPauta=" + String.valueOf(id));
-		}finally{
-			if((stmt != null) && !stmt.isClosed())
-				stmt.close();
-			if((conn != null) && !conn.isClosed())
-				conn.close();
+
+		try(
+				Connection conn = ConnectionDAO.getInstance().getConnection();
+				Statement stmt = conn.createStatement();
+				)
+		{
+			try{
+				stmt.execute("DELETE FROM pautas WHERE idPauta=" + String.valueOf(id));
+			}
 		}
 	}
 	
