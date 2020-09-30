@@ -35,10 +35,14 @@ public class UsuarioDAO {
 			}
 		}
 
-
 	}
+	public Usuario buscarPorId(int id) throws SQLException{
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
 
-	SearchUsuarioDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.UsuarioDAO, int id, conn,  stmt,  rs);
+		SearchUsuarioDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.UsuarioDAO, id, conn,  stmt,  rs);
+	}
 
 	public String buscarEmail(int id) throws SQLException{
 

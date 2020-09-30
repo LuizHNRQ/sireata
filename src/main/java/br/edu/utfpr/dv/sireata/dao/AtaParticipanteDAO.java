@@ -16,7 +16,15 @@ import br.edu.utfpr.dv.sireata.model.AtaParticipante;
 
 public class AtaParticipanteDAO {
 
-	SearchAtaDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.AtaDAO,int id, conn,  stmt,  rs);
+
+	public AtaParticipante buscarPorId(int id) throws SQLException{
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		SearchAtaDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.AtaDAO, id, conn,  stmt,  rs);
+	}
+
 	
 	public List<AtaParticipante> listarPorAta(int idAta) throws SQLException{
 

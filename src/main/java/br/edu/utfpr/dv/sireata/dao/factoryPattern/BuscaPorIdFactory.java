@@ -8,7 +8,7 @@ import java.sql.Statement;
 
 public class BuscaPorIdFactory {
 
-    public static BuscarPorId novaBusca(TipoDeBusca tipo, int id,Connection conn, Statement stmt, ResultSet rs){
+    public static SearchAtaDAO novaBusca(TipoDeBusca tipo, int id, Connection conn, Statement stmt, ResultSet rs){
 
         BuscarPorId busca = null;
         switch ( tipo ){
@@ -38,5 +38,6 @@ public class BuscaPorIdFactory {
                 break;
         }
 
+        return null;
     }
 }

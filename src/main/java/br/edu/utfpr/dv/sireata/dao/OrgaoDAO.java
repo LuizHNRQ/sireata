@@ -17,9 +17,17 @@ import br.edu.utfpr.dv.sireata.model.OrgaoMembro;
 import br.edu.utfpr.dv.sireata.model.Usuario;
 
 public class OrgaoDAO {
+
+	public Orgao buscarPorId(int id) throws SQLException{
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		SearchOrgaoDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.OrgaoDAO,id, conn,  stmt,  rs);
+	}
 	
 
-	SearchOrgaoDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.OrgaoDAO,int id, conn,  stmt,  rs);
+
 	
 	public List<Orgao> listarTodos(boolean apenasAtivos) throws SQLException{
 

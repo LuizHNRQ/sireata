@@ -15,10 +15,16 @@ import br.edu.utfpr.dv.sireata.dao.tiposDeFactory.SearchPautaDAO;
 import br.edu.utfpr.dv.sireata.model.Pauta;
 
 public class PautaDAO {
-	
 
-	SearchPautaDAO = BuscaPorIdFactory.novaBusca(TipoDeBusca.PautaDAO, int id, conn,  stmt,  rs);
-	
+
+	public Pauta buscarPorId(int id) throws SQLException{
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		SearchPautaDAO = BuscaPorIdFactory.novaBusca(TipoDeBusca.PautaDAO, id, conn,  stmt,  rs);
+	}
+
 	public List<Pauta> listarPorAta(int idAta) throws SQLException{
 
 		try(

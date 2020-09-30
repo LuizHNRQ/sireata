@@ -17,7 +17,15 @@ import br.edu.utfpr.dv.sireata.model.Campus;
 
 public class CampusDAO {
 
-	SearchCampusDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.CampusDAO,int id, conn,  stmt,  rs);
+
+
+	public Campus buscarPorId(int id) throws SQLException{
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		SearchCampusDAO buscarPorId = BuscaPorIdFactory.novaBusca(TipoDeBusca.CampusDAO,id, conn,  stmt,  rs);
+	}
 	
 	public Campus buscarPorDepartamento(int idDepartamento) throws SQLException{
 
@@ -39,8 +47,6 @@ public class CampusDAO {
 				}
 			}
 		}
-		
-
 	}
 	
 	public List<Campus> listarTodos(boolean apenasAtivos) throws SQLException{
